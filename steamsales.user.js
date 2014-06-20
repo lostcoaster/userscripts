@@ -2,7 +2,7 @@
 // @name           SteamSummerSales2014
 // @namespace      https://github.com/lostcoaster/userscripts
 // @author         lostcoaster
-// @version        0.4
+// @version        0.6
 // @description    steam summer sales 2014 aid
 // @grant          unsafeWindow
 // @include        /https?:\/\/store\.steampowered\.com\/*/
@@ -163,15 +163,19 @@
             myWindow.ShowVoteDialog();
         }
 
+        var dialog = myWindow.g_$VoteDialog;
+        if(dialog.find('.voted').length > 0) {
+            //already voted
+            save_setting('last_vote', this_vote);
+            return;
+        }
+
         // do I have time ?
         if ($('#vote_countdown').text().indexOf('00:00:') >= 0){
             //last minute, just vote!
             auto_vote();
             return;
         }
-
-        var dialog = myWindow.g_$VoteDialog;
-        if(dialog.find('.voted').length > 0) return; //already voted
 
         if(vote_groups.length > 0 || active_notes.length > 0) return ; //previous groups exist
 
