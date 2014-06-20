@@ -2,7 +2,7 @@
 // @name           SteamSummerSales2014
 // @namespace      https://github.com/lostcoaster/userscripts
 // @author         lostcoaster
-// @version        0.11
+// @version        0.12
 // @description    steam summer sales 2014 aid
 // @grant          unsafeWindow
 // @include        /https?:\/\/store\.steampowered\.com\/*/
@@ -188,7 +188,7 @@
                 console.log('SSS: requesting game info from '+url);
                 $.ajax({
                     url: url,
-                    group: ind,
+                    group_id: ind,
                     info: $.trim($(g).find('.discount').text()) + '(' + $.trim($(g).find('.discount_final_price').text()) + ')',
                     success: function(data){
                         var ajax_data = $(data);
@@ -196,7 +196,12 @@
                             this.info +
                             (ajax_data.find('.game_area_already_owned').length > 0 ? '-Owned':'');
 
-                        update_name(this.group, name);
+                        update_name(this.group_id, name);
+                    },
+                    error: function(){
+                        var ind = vote_groups.indexOf(undefined);
+                        if(ind != -1)
+                            vote_groups.splice(ind, 1);
                     }
                 });
             });
@@ -248,6 +253,11 @@
                             n.onclick = function(event){event.target.close()};
                             flash_groups = [];
                         }
+                    },
+                    error: function(){
+                        var ind = flash_groups.indexOf(undefined);
+                        if(ind != -1)
+                            flash_groups.splice(ind, 1);
                     }
                 })
             });
@@ -279,6 +289,11 @@
                             n.onclick = function(event){event.target.close()};
                             daily_groups = [];
                         }
+                    },
+                    error: function(){
+                        var ind = daily_groups.indexOf(undefined);
+                        if(ind != -1)
+                            daily_groups.splice(ind, 1);
                     }
                 })
             })
@@ -289,11 +304,23 @@
     }
 
     /**
+     * check all the fucking countdowns because dumb valve won't refresh pages when they turn 0
+     */
+    function check_all_countdown(){
+        var zero = false;
+        $('.countdown').each(function(i,d){if($(d).text() == '00:00:00') zero = true;})
+        if(zero){
+            location.reload();
+        }
+    }
+
+    /**
      * init, initial, initialize, initialization, initializationism
      */
     function init(){
         setInterval(function(){get_vote()},10000);
         setInterval(function(){get_deals()}, 20000); get_deals();
+        setInterval(function(){check_all_countdown()}, 10000);
         $('#global_actions').append('<span>SSS Running</span>');
     }
 
