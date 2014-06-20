@@ -9,6 +9,8 @@
 // @matches        /https?:\/\/store\.steampowered\.com\/*/
 // @updateURL
 
+//usage : javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://lostcoaster.github.io/userscripts/steamsales.user.js';})();
+
 (function(){
     "use strict";
 
@@ -137,10 +139,10 @@
 
     /**
      * literal
-     * @param group
+     * @param {number} group - 0 for first group
      */
     function do_vote(group){
-        $('.btn_vote').eq(group).click();
+        myWindow.OnVoteClick(load_setting('last_vote'), group+1);
     }
 
     /**
@@ -148,7 +150,10 @@
      */
     function get_vote(){
         var last_vote = load_setting('last_vote');
-        //todo : compare with last vote
+        var this_vote = $J('.vote_option_group').attr('data-voteid');
+        if(this_vote == last_vote){
+            return; //same as last vote
+        }
 
         if(!myWindow.g_$VoteDialog){
             myWindow.ShowVoteDialog();
@@ -178,6 +183,8 @@
                 });
             });
         });
+
+        save_setting('last_vote', this_vote);
     }
 
     function init(){
