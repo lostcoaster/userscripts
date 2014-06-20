@@ -2,7 +2,7 @@
 // @name           SteamSummerSales2014
 // @namespace      https://github.com/lostcoaster/userscripts
 // @author         lostcoaster
-// @version        0.8
+// @version        0.9
 // @description    steam summer sales 2014 aid
 // @grant          unsafeWindow
 // @include        /https?:\/\/store\.steampowered\.com\/*/
@@ -207,8 +207,8 @@
      * init, initial, initialize, initialization, initializationism
      */
     function init(){
-        console.log('SSS: initializing');
         setInterval(function(){get_vote()},10000);
+        $('#global_actions').append('<span>SSS Running</span>');
     }
 
     //run
