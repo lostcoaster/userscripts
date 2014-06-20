@@ -142,7 +142,10 @@
      * @param {number} group - 0 for first group
      */
     function do_vote(group){
-        myWindow.OnVoteClick(load_setting('last_vote'), group+1);
+        console.log('SSS: voting for group '+ (group+1));
+        var this_vote = $J('.vote_option_group').attr('data-voteid');
+        myWindow.OnVoteClick(this_vote, group+1);
+        save_setting('last_vote', this_vote);
     }
 
     /**
@@ -158,6 +161,14 @@
         if(!myWindow.g_$VoteDialog){
             myWindow.ShowVoteDialog();
         }
+
+        // do I have time ?
+        if ($('#vote_countdown').text().indexOf('00:00:') >= 0){
+            //last minute, just vote!
+            auto_vote();
+            return;
+        }
+
         var dialog = myWindow.g_$VoteDialog;
 
         if(vote_groups.length > 0 || active_notes.length > 0) return ; //previous groups exist
@@ -183,12 +194,13 @@
                 });
             });
         });
-
-        save_setting('last_vote', this_vote);
     }
 
+    /**
+     * init, initial, initialize, initialization, initializationism
+     */
     function init(){
-        setInterval(function(){get_vote()},1000);
+        setInterval(function(){get_vote()},10000);
     }
 
     //run
