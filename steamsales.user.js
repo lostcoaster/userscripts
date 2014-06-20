@@ -2,7 +2,7 @@
 // @name           SteamSummerSales2014
 // @namespace      https://github.com/lostcoaster/userscripts
 // @author         lostcoaster
-// @version        0.6
+// @version        0.7
 // @description    steam summer sales 2014 aid
 // @grant          unsafeWindow
 // @include        /https?:\/\/store\.steampowered\.com\/*/
@@ -121,12 +121,6 @@
         //vote
         console.log('SSS: voting group' + note.group);
         do_vote(note.group);
-        //close all
-        for (var i = 0; i < active_notes.length; i++) {
-            active_notes[i].close();
-        }
-        //clear
-        active_notes = [];
     }
 
     /**
@@ -147,6 +141,13 @@
         var this_vote = $J('.vote_option_group').attr('data-voteid');
         myWindow.OnVoteClick(this_vote, group+1);
         save_setting('last_vote', this_vote);
+
+        //close all
+        for (var i = 0; i < active_notes.length; i++) {
+            active_notes[i].close();
+        }
+        //clear
+        active_notes = [];
     }
 
     /**
