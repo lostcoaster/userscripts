@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name           SteamSummerSales2014
-// @namespace
+// @namespace      https://github.com/lostcoaster/userscripts
 // @author         lostcoaster
-// @version        0.1
+// @version        0.3
 // @description    steam summer sales 2014 aid
 // @grant          unsafeWindow
 // @include        /https?:\/\/store\.steampowered\.com\/*/
 // @matches        /https?:\/\/store\.steampowered\.com\/*/
-// @updateURL
+// @updateURL      http://lostcoaster.github.io/userscripts/steamsales.user.js
+// ==/UserScript==
 
 //usage : javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://lostcoaster.github.io/userscripts/steamsales.user.js';})();
 
