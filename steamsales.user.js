@@ -2,7 +2,7 @@
 // @name           SteamSummerSales2014
 // @namespace      https://github.com/lostcoaster/userscripts
 // @author         lostcoaster
-// @version        0.9
+// @version        0.11
 // @description    steam summer sales 2014 aid
 // @grant          unsafeWindow
 // @include        /https?:\/\/store\.steampowered\.com\/*/
@@ -203,11 +203,97 @@
         });
     }
 
+
+    /**
+     * @type {string[]}
+     */
+    var flash_groups = [];
+
+    /**
+     * @type {string[]}
+     */
+    var daily_groups = [];
+
+    /**
+     * get new deals
+     */
+    function get_deals(){
+
+        var flash_countdown = $('#flash_sale_countdown').text();
+        var daily_countdown = $('#daily_deal_countdown').text();
+
+        var last_countdown;
+        last_countdown = load_setting('last_flash_countdown');
+        last_countdown = last_countdown ? last_countdown : '00:00:00';
+        if(flash_countdown > last_countdown){
+            //new flash
+
+            var flash_deals = $('#summersale_flashsales').find('.summersale_dailydeal_ctn');
+            flash_deals.each(function(i,d){
+                var url = $(d).find('a').attr('href');
+                console.log('SSS: requesting game info from '+url);
+                flash_groups.push(undefined);
+                $.ajax({
+                    url: url,
+                    success: function(data){
+                        var ajax_data = $(data);
+                        var ind = flash_groups.indexOf(undefined);
+                        flash_groups[ind] = ajax_data.find('.apphub_AppName').text() + ':' +
+                            ajax_data.find('.discount_pct:first').text() +
+                            '(' + ajax_data.find('.discount_final_price:first').text() + ')' +
+                            (ajax_data.find('.game_area_already_owned').length > 0 ? '-Owned':'');
+
+                        if(flash_groups.indexOf(undefined)===-1){
+                            var n = new Notification('新的限时抢购',{body:flash_groups.join('\n')});
+                            n.onclick = function(event){event.target.close()};
+                            flash_groups = [];
+                        }
+                    }
+                })
+            });
+        }
+
+
+        last_countdown = load_setting('last_daily_countdown');
+        last_countdown = last_countdown ? last_countdown : '00:00:00';
+        if(daily_countdown > last_countdown){
+            //new daily
+
+            var daily_deals = $('.summersale_dailydeals').find('.summersale_dailydeal_ctn');
+            daily_deals.each(function(i,d){
+                var url = $(d).find('a').attr('href');
+                console.log('SSS: requesting game info from '+url);
+                daily_groups.push(undefined);
+                $.ajax({
+                    url: url,
+                    success: function(data){
+                        var ajax_data = $(data);
+                        var ind = daily_groups.indexOf(undefined);
+                        daily_groups[ind] = ajax_data.find('.apphub_AppName').text() + ':' +
+                            ajax_data.find('.discount_pct:first').text() +
+                            '(' + ajax_data.find('.discount_final_price:first').text() + ')' +
+                            (ajax_data.find('.game_area_already_owned').length > 0 ? '-Owned':'');
+
+                        if(daily_groups.indexOf(undefined)===-1){
+                            var n = new Notification('新的每日特惠',{body:daily_groups.join('\n')});
+                            n.onclick = function(event){event.target.close()};
+                            daily_groups = [];
+                        }
+                    }
+                })
+            })
+        }
+
+        save_setting('last_flash_countdown', flash_countdown);
+        save_setting('last_daily_countdown', daily_countdown);
+    }
+
     /**
      * init, initial, initialize, initialization, initializationism
      */
     function init(){
         setInterval(function(){get_vote()},10000);
+        setInterval(function(){get_deals()}, 20000); get_deals();
         $('#global_actions').append('<span>SSS Running</span>');
     }
 
