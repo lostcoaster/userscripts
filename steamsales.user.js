@@ -2,11 +2,11 @@
 // @name           SteamSummerSales2014
 // @namespace      https://github.com/lostcoaster/userscripts
 // @author         lostcoaster
-// @version        0.12
+// @version        0.14
 // @description    steam summer sales 2014 aid
 // @grant          unsafeWindow
-// @include        /https?:\/\/store\.steampowered\.com\/*/
-// @matches        /https?:\/\/store\.steampowered\.com\/*/
+// @include        /https?:\/\/store\.steampowered\.com\/?[^\/]*/
+// @matches        /https?:\/\/store\.steampowered\.com\/?[^\/]*/
 // @updateURL      http://lostcoaster.github.io/userscripts/steamsales.user.js
 // ==/UserScript==
 
@@ -59,7 +59,8 @@
             settings = {};
         }
         settings[name] = value;
-        localStorage.setItem(storage_string, JSON.stringify(settings));
+        var to_save =  JSON.stringify(settings);
+        localStorage.setItem(storage_string, to_save);
     }
 
     /**
@@ -318,6 +319,9 @@
      * init, initial, initialize, initialization, initializationism
      */
     function init(){
+        if($('.summer_top').length == 0){
+            return; // not the home page, retreat.
+        }
         setInterval(function(){get_vote()},10000);
         setInterval(function(){get_deals()}, 20000); get_deals();
         setInterval(function(){check_all_countdown()}, 10000);

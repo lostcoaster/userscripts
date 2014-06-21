@@ -2,7 +2,7 @@
 // @name           SteamSummerSales2014
 // @namespace      https://github.com/lostcoaster/userscripts
 // @author         lostcoaster
-// @version        0.13
+// @version        0.14
 // @description    steam summer sales 2014 aid
 // @grant          unsafeWindow
 // @include        /https?:\/\/store\.steampowered\.com\/?[^\/]*/
@@ -317,6 +317,9 @@
      * init, initial, initialize, initialization, initializationism
      */
     function init(){
+        if($('.summer_top').length == 0){
+            return; // not the home page, retreat.
+        }
         setInterval(function(){get_vote()},10000);
         setInterval(function(){get_deals()}, 20000); get_deals();
         setInterval(function(){check_all_countdown()}, 10000);
