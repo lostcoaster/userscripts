@@ -22,7 +22,7 @@ function latest_id(id) {
 
 function send_email(contents) {
     var email = localStorage.getItem('lc.notify_email');
-    if (!email) {
+    if (!email || email=='-') {
         return; // not to send
     }
 
@@ -144,7 +144,7 @@ function set_enable(enabled) {
                 alert('你输入的邮箱是' + email + ', 如果有误, 请点击关闭推送, 然后重新打开输入.');
                 localStorage.setItem('lc.notify_email', email);
             } else {
-                localStorage.setItem('lc.notify_email', '');
+                localStorage.setItem('lc.notify_email', '-');
             }
         }
         timer = setInterval(check_for_post, scan_interval);
