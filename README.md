@@ -22,5 +22,8 @@ steamsales_en.user.js:
   English version of the previous one.
   
 
+steamcn.user.js:
+-----------
+  Notify the new posts in steamcn.
 
   
