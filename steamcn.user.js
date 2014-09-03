@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name       SteamCN Notifier
 // @namespace  http://lostcoaster.github.io/
-// @version    0.1.2
+// @version    0.1.3
 // @author     lostcoaster
 // @description  enter something useful
-// @match      /http:\/\/steamcn\.com\/forum\.php.*/
 // @include    /http:\/\/steamcn\.com\/forum\.php.*/
 // @grant      unsafeWindow
 // @copyright  GPL license
+// @require    https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
 // ==/UserScript==
 
 var timer;
