@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name       SteamCN Notifier
 // @namespace  http://lostcoaster.github.io/
-// @version    0.1
+// @version    0.1.2
 // @author     lostcoaster
 // @description  enter something useful
-// @match      http://steamcn.com/forum.php*
+// @match      /http:\/\/steamcn\.com\/forum\.php.*/
+// @include    /http:\/\/steamcn\.com\/forum\.php.*/
 // @grant      unsafeWindow
 // @copyright  GPL license
 // ==/UserScript==
+
 var timer;
 var scan_interval = 60 * 1000; //1分钟扫描间隔
 
@@ -22,7 +24,7 @@ function latest_id(id) {
 
 function send_email(contents) {
     var email = localStorage.getItem('lc.notify_email');
-    if (!email || email=='-') {
+    if (!email) {
         return; // not to send
     }
 
@@ -144,7 +146,7 @@ function set_enable(enabled) {
                 alert('你输入的邮箱是' + email + ', 如果有误, 请点击关闭推送, 然后重新打开输入.');
                 localStorage.setItem('lc.notify_email', email);
             } else {
-                localStorage.setItem('lc.notify_email', '-');
+                localStorage.setItem('lc.notify_email', '');
             }
         }
         timer = setInterval(check_for_post, scan_interval);
