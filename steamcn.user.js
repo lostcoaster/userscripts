@@ -10,8 +10,46 @@
 // @require    https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
 // ==/UserScript==
 
+"use strict";
+
 var timer;
 var scan_interval = 60 * 1000; //1分钟扫描间隔
+
+//todo : run a one-time-clear, or upgrading.
+/**
+ * the options class
+ * @constructor
+ */
+function Options(){
+    var options = {
+        email:'-',
+        last_check:0,
+        latest_post:0,
+        enabled_forums:[],
+        api_key:'TrPFSHUL5CSZGPg7I2OMZQ',
+        special_users:[],
+        is_blacklist:true,
+        version:1
+    };
+    for(var key in options){
+        if(!options.hasOwnProperty(key)){continue}
+        this[key] = {
+            default_val: options[key],
+            name: 'lc.steamcn.'+key,
+            get: function(){
+                var temp = localStorage.getItem(this.name);
+                if(!temp){
+                    return this.default_val;
+                } else {
+                    return JSON.parse(temp);
+                }
+            },
+            set: function (val) {
+                localStorage.setItem(this.name, JSON.stringify(val))
+            }
+        };
+    }
+}
 
 function latest_id(id) {
     if (id) {
