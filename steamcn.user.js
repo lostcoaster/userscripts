@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       SteamCN Notifier
 // @namespace  http://lostcoaster.github.io/
-// @version    0.2.0
+// @version    0.2.1
 // @author     lostcoaster
 // @description  enter something useful
 // @include    /http:\/\/steamcn\.com\/.*/
@@ -27,7 +27,12 @@ function Options() {
         email: '',
         last_check: 0,
         latest_post: 0,
-        enabled_forums: [],
+        enabled_forums: ["148", "188", "161",
+            "305", "271", "234", "197", "254", "127", "200", "161", "188", "234", "271", "129", "257", "201", "254",
+            "189", "127", "235", "261", "301", "302", "303", "304", "291", "299", "305", "280", "281", "282", "297",
+            "293", "294", "295", "296", "307", "308", "309", "310", "207", "244", "246", "245", "248", "255", "270",
+            "251", "232", "274", "275", "276", "277", "148", "259", "273", "200", "140", "197", "238", "163", "202",
+            "262", "298", "233", "258"],
         api_key: 'TrPFSHUL5CSZGPg7I2OMZQ',
         special_users: [],
         is_blacklist: true,
@@ -91,12 +96,7 @@ function construct_setting_panel() {
     jQuery('<style>.pbl p>div{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAABxVBMVEUAAAAGmwUEmwMGmwZFuT83sjFIu0I7tTcapRkFmAUXoxU/tjo2sjESoRABmgEFmwRIukI/tjkImwcTohEAlgAPoA5NvUdEuD82sTMRoBFDuD0AlQAOnw1HuUEgqB4EmwQurioTohEAmABMu0UJnQgYpBY4sjMzsC4gqB00sTAqrCcYpBY+tTgFmwUUohJl0mNWvl2U1ZmOzZaS2ZWCyouM4YeG3oR4z3t103Rjvm1nympgvWpgxWRYyFpVwFpex1hSxlRHs1JKuFE2tD4kqSOc3p2Z25uT5Y6GzI6R5YyAy4d20Hl92XduwnZ12nFtzHBrxnBs0mxq1GhavWFezl5Yw11Zy1lPuVhOuVJCsU9DtE1JwUxHtEs+skk8rklCtEM1qUNEuEExqD81rzYqqzQmqDIoqSoqrCgdpR8boh6a2J+R0piOz5aR1pSIzZCM2Y2D14SB14GF34B+z4CC3X55zH5913tww3p0wnp72Xl1yHlyy3dxyXdy0XR11HBnxGllymRXt2Rj0WFczFxVu1lQvVdRwlVFtk9TwU5JtU5NvEpDvEg6rEhBukc+rkI2rT06tDcwry8foS4epCoaoicSnSEAlAI+J5dhAAAAL3RSTlMAEM9gICDv7+/v37+/n5+AcHBwMDAg7+/v79/fz7+/v6+vr4+PgHBwcGBgYFBQQHZnFxEAAAFHSURBVCjPYsAEjMz8zAzYxJn6neK5hDEl5IONTEx85TDEddNyynsirV0wDJL0youMc7RMR5dQici2jo2ybFFAExfOMPSKag8OkGBFk5CpMjRwMqhJVEcTF4rPKm21q7bhQRMX5TDMDQ31N2dnhXhUSAQqoVjvZtVm692lBuKIcPbFZCoxgph6ycbm0Q4WDRCDAJOuMDLxiGECyjByFRvb2gaWQQximGZkmeBo3ckkyqBq51YbFmTWIQgxl9OjMWFSangEh3a6cX6IvlkdN9RC/mTfpKlTUgwCXMxdA/VLTMVZYG7ky4xLmpzqbOPtWtjk524PNAguk+EYm+Lca1WgH+Tpw43sL960cCfnbodm/SJPNhYGFBkXA7tohxCgQQJoYaEx0cYqTN/URxYj3rQm+FtUmoqxYMa0ZqKFGcggTKAjxaaMzAcA5O1EOzcjGBYAAAAASUVORK5CYII=) no-repeat;height: 25px;width: 25px;position: relative;top: -25px;left: 0 }</style>').appendTo('head');
 
     // all forums, may update if changed
-    var all_forums = ["148", "188", "161",
-            "305", "271", "234", "197", "254", "127", "200", "161", "188", "234", "271", "129", "257", "201", "254",
-            "189", "127", "235", "261", "301", "302", "303", "304", "291", "299", "305", "280", "281", "282", "297",
-            "293", "294", "295", "296", "307", "308", "309", "310", "207", "244", "246", "245", "248", "255", "270",
-            "251", "232", "274", "275", "276", "277", "148", "259", "273", "200", "140", "197", "238", "163", "202",
-            "262", "298", "233", "258"];
+    var all_forums = options.enabled_forums.default_val;
     // a long code , direct copypasta from the steamcn forum, yep.
     var panel = jQuery('<div id="lc-setting-panel" class="fwinmask" style="padding: 0 5px; position: fixed; z-index: 201; left: 632.5px; top: 286px;"><table cellpadding="0" cellspacing="0" class="fwin"><tbody><tr><td class="t_l"></td><td class="t_c"></td><td class="t_r"></td></tr><tr><td class="m_l"></td><td class="m_c"><h3 class="flb">调整推送器设置<span><a href="javascript:;" class="flbc" title="关闭">关闭</a></span></h3><div id="lc-panel-container"></div></td><td class="m_r"></td></tr><tr><td class="b_l"></td><td class="b_c"></td><td class="b_r"></td></tr></tbody></table></div>');
     panel.find('.flbc').click(function () {
